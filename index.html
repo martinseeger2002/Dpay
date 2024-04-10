@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GLTF Model Display</title>
+    <!-- Import p5.js library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.4.0/p5.js"></script>
+
+    <!-- Import GLTFLoader.js -->
+    <script src="https://dogecdn.ordinalswallet.com/inscription/content/d65dadc7229c078c6c9ddf25b052c8de3cbfe3d95aa84832d374178fae304e53i0"></script>
+</head>
+<body>
+    <script>
+        let gltfModel;
+
+function preload() {
+    // Load the GLTF model
+    gltfModel = loadModel('https://dogecdn.ordinalswallet.com/inscription/content/e41e9a536b3d309212a373183329332977d01c53416c55b65aa1df15b34e10cbi0', true);
+}
+
+function setup() {
+    createCanvas(windowWidth, windowHeight, WEBGL);
+}
+
+function draw() {
+    background(200);
+
+    // Basic rotation for better view
+    rotateX(frameCount * 0.01);
+    rotateY(frameCount * 0.01);
+
+    // Display the model
+    model(gltfModel);
+}
+
+    </script>
+</body>
+</html>
