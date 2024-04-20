@@ -4,11 +4,13 @@ import json
 with open('addresses.json', 'r') as file:
     data = json.load(file)
 
-# Extract the Dogecoin addresses
-addresses = [entry['dogecoin_address'] for entry in data['airDropList']]
+# Extract the Dogecoin addresses and wrap them with <li> tags
+addresses = [f"<li>{entry['dogecoin_address']}</li>" for entry in data['airDropList']]
 
-# Save the addresses to a new text file in the desired format
-with open('addresses.txt', 'w') as file:
-    json.dump(addresses, file, indent=4)
+# Save the addresses to a new text file with each address on a new line
+with open('addresses.html', 'w') as file:
+    for address in addresses:
+        file.write(address + "\n")
 
-print("Addresses have been successfully written to addresses.txt")
+print("Addresses have been successfully written to addresses.html")
+
