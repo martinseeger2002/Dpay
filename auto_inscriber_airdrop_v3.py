@@ -44,6 +44,7 @@ def handle_errors(output):
         print("Detected specific error message, proceeding to wallet sync...")
         while True:
             result_sync = subprocess.run("node . wallet sync", shell=True, capture_output=True, text=True)
+            time.sleep(1)
             print("Output from wallet sync command:")
             print(result_sync.stdout)
             if "inscription txid" in result_sync.stdout:
