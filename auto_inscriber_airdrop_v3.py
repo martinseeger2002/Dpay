@@ -9,9 +9,6 @@ def extract_details(file_name):
         with open(file_name, 'r', encoding='utf-8') as file:
             data = json.load(file)
         return [{
-            'handle': entry['handle'],
-            'at': entry['at'],
-            'note': entry['note'],
             'dogecoin_address': entry['dogecoin_address']
         } for entry in data['airDropList']]
     except Exception as e:
@@ -34,12 +31,11 @@ def run_node_commands(start, end, directory, file_prefix, file_extension, detail
             print("Error in mint command:")
             print(result_mint.stderr)
 
-        txid_search = re.search("inscription txid: (\w+)", result_mint.stdout)
+        txid_search = re.search("inscription txid: (\\w+)", result_mint.stdout)
         if txid_search:
             txid = txid_search.group(1)
-            print("Successful mint, updating JSON file, continuing in 100 seconds....")
+            print("Successful mint, updating JSON file")
             update_json_file(image_path, txid, details)
-            time.sleep(100)
         else:
             handle_errors(result_mint.stdout)
 
@@ -51,12 +47,12 @@ def handle_errors(output):
             print("Output from wallet sync command:")
             print(result_sync.stdout)
             if "inscription txid" in result_sync.stdout:
-                txid = re.search("inscription txid: (\w+)", result_sync.stdout).group(1)
+                txid = re.search("inscription txid: (\\w+)", result_sync.stdout).group(1)
                 update_json_file(image_path, txid, details)
                 break
             elif "'64: too-long-mempool-chain'" in result_sync.stdout:
-                print("Retrying in 100 seconds...")
-                time.sleep(100)
+                print("Retrying in 240 seconds...")
+                time.sleep(240)
             else:
                 print("Unknown response, stopping the retry loop.")
                 break
@@ -72,9 +68,6 @@ def update_json_file(image_path, txid, details):
         data[key] = {
             "txid": txid,
             "address": details['dogecoin_address'],
-            "handle": details['handle'],
-            "at": details['at'],
-            "note": details['note']
         }
         with open(json_file_name, 'w') as file:
             json.dump(data, file, indent=4)
@@ -83,9 +76,9 @@ def update_json_file(image_path, txid, details):
 
 file_name = 'airDropList.json'
 details_list = extract_details(file_name)
-directory = 'C:\\doginals-main\\RiceCerts\\gifCerts\\redWorm'
-file_prefix = 'smallCert'
-file_extension = 'webp'
-start = 381
-end = 400
+directory = 'E:\\nodedoginals\\dogecoin-ordinals-drc-20-inscription\\stones'
+file_prefix = 'dpaystone'
+file_extension = 'html'
+start = 1
+end = 70
 run_node_commands(start, end, directory, file_prefix, file_extension, details_list)
